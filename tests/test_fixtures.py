@@ -15,21 +15,22 @@ def config_desktop():
 
 @pytest.fixture
 def config_mobile():
-    browser.config.window_height = 828
-    browser.config.window_width = 1792
+    browser.config.window_height = 844
+    browser.config.window_width = 390
     yield
     browser.quit()
 
 
 def test_github_desktop(config_desktop):
     browser.open('https://github.com')
-    browser.element('[href="/login"]').click()
+    browser.element('a[href="/login"]').click()
     assert browser.element('[class="auth-form-header p-0"]').should(have.text('Sign in to GitHub'))
     pass
 
 
 def test_github_mobile(config_mobile):
     browser.open('https://github.com')
+    browser.element('div>[aria-label="Toggle navigation"]').click()
     browser.element('[href="/login"]').click()
     assert browser.element('[class="auth-form-header p-0"]').should(have.text('Sign in to GitHub'))
     pass
