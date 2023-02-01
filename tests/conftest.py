@@ -1,6 +1,18 @@
 import pytest
 from selene.support.shared import browser
 
+@pytest.fixture(params=['desktop', 'mobile'])
+def browser_settings_skip(request):
+    if request.param == 'desktop':
+        browser.config.window_width = 1920
+        browser.config.window_height = 1080
+    elif request.param == 'mobile':
+        browser.config.window_width = 390
+        browser.config.window_height = 844
+    browser.open('https://github.com')
+    return request.param
+
+
 
 @pytest.fixture(params=['desktop', 'mobile'])
 def browser_settings(request):
@@ -11,6 +23,7 @@ def browser_settings(request):
         browser.config.window_width = 390
         browser.config.window_height = 844
     browser.open('https://github.com')
+
 
 
 @pytest.fixture
