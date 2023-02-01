@@ -6,24 +6,18 @@ from selene import have
 from selene.support.shared import browser
 
 
-@pytest.mark.parametrize('width, height', [pytest.param(1920, 1080, id='window size 1920x1080'),
-                                           pytest.param(390, 844, id='window size 390x844')
-                                           ])
-def test_github_desktop(browser_settings, width, height):
-    if width == 390:
-        pytest.skip('этот тест для десктопной версии')
-    browser.driver.set_window_size(width, height)
+def test_github_desktop(browser_settings_skip):
+    size = browser_settings_skip
+    if size == 'mobile':
+        pytest.skip('Этот тест для ДЕСКТОПНОЙ версии')
     browser.element('a[href="/login"]').click()
-    browser.element('[class="auth-form-header p-0"]').should(have.text('Sign in to GitHub'))
+    browser.element('[class="auth-form-body mt-3"]').should(have.text('Password'))
 
 
-@pytest.mark.parametrize('width, height', [pytest.param(1920, 1080, id='window size 1920x1080'),
-                                           pytest.param(390, 844, id='window size 390x844')
-                                           ])
-def test_github_mobile(browser_settings, width, height):
-    if width == 1920:
-        pytest.skip('этот тест для мобильной версии')
-    browser.driver.set_window_size(width, height)
+def test_github_mobile(browser_settings_skip):
+    size = browser_settings_skip
+    if size == 'desktop':
+        pytest.skip('Этот тест для МОБИЛЬНОЙ версии')
     browser.element('[class="Button-label"]').click()
     browser.element('a[href="/login"]').click()
-    assert browser.element('[class="application-main "]').should(have.text('Password'))
+    browser.element('[class="auth-form-body mt-3"]').should(have.text('Password'))
